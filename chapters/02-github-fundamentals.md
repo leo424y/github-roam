@@ -1,98 +1,98 @@
-#Git基本知识与GitHub使用
+#Git基本知識與GitHub使用
 
 ##Git
 
-从一般开发者的角度来看，git有以下功能：
+從一般開發者的角度來看，git有以下功能：
 
-1. 从服务器上克隆数据库（包括代码和版本信息）到单机上。
-2. 在自己的机器上创建分支，修改代码。
-3. 在单机上自己创建的分支上提交代码。
-4. 在单机上合并分支。
-5. 新建一个分支，把服务器上最新版的代码fetch下来，然后跟自己的主分支合并。
-6. 生成补丁（patch），把补丁发送给主开发者。
-7. 看主开发者的反馈，如果主开发者发现两个一般开发者之间有冲突（他们之间可以合作解决的冲突），就会要求他们先解决冲突，然后再由其中一个人提交。如果主开发者可以自己解决，或者没有冲突，就通过。
-8. 一般开发者之间解决冲突的方法，开发者之间可以使用pull 命令解决冲突，解决完冲突之后再向主开发者提交补丁。
+1. 從伺服器上克隆資料庫（包括程式碼和版本資訊）到單機上。
+2. 在自己的機器上建立分支，修改程式碼。
+3. 在單機上自己建立的分支上提交程式碼。
+4. 在單機上合併分支。
+5. 新建一個分支，把伺服器上最新版的程式碼fetch下來，然後跟自己的主分支合併。
+6. 生成補丁（patch），把補丁傳送給主開發者。
+7. 看主開發者的反饋，如果主開發者發現兩個一般開發者之間有衝突（他們之間可以合作解決的衝突），就會要求他們先解決衝突，然後再由其中一個人提交。如果主開發者可以自己解決，或者沒有衝突，就通過。
+8. 一般開發者之間解決衝突的方法，開發者之間可以使用pull 命令解決衝突，解決完衝突之後再向主開發者提交補丁。
 
-从主开发者的角度（假设主开发者不用开发代码）看，git有以下功能：
+從主開發者的角度（假設主開發者不用開發程式碼）看，git有以下功能：
 
-1. 查看邮件或者通过其它方式查看一般开发者的提交状态。
-2. 打上补丁，解决冲突（可以自己解决，也可以要求开发者之间解决以后再重新提交，如果是开源项目，还要决定哪些补丁有用，哪些不用）。
-3. 向公共服务器提交结果，然后通知所有开发人员。
+1. 檢視郵件或者通過其它方式檢視一般開發者的提交狀態。
+2. 打上補丁，解決衝突（可以自己解決，也可以要求開發者之間解決以後再重新提交，如果是開源項目，還要決定哪些補丁有用，哪些不用）。
+3. 向公共伺服器提交結果，然後通知所有開發人員。
 
 ###Git初入
 
-如果是第一次使用Git，你需要设置署名和邮箱：
+如果是第一次使用Git，你需要設定署名和郵箱：
 
 ```
-$ git config --global user.name "用户名"
-$ git config --global user.email "电子邮箱"
+$ git config --global user.name "使用者名稱"
+$ git config --global user.email "電子郵箱"
 ```
 
-将代码仓库clone到本地，其实就是将代码复制到你的机器里，并交由Git来管理：
+將程式碼倉庫clone到本地，其實就是將程式碼複製到你的機器裡，並交由Git來管理：
 
 ```
 $ git clone git@github.com:someone/symfony-docs-chs.git
 ```
-    
-你可以修改复制到本地的代码了（symfony-docs-chs项目里都是rst格式的文档）。当你觉得完成了一定的工作量，想做个阶段性的提交：
 
-向这个本地的代码仓库添加当前目录的所有改动：
+你可以修改複製到本地的程式碼了（symfony-docs-chs項目裡都是rst格式的文件）。當你覺得完成了一定的工作量，想做個階段性的提交：
+
+向這個本地的程式碼倉庫新增當前目錄的所有改動：
 
 ```
 $ git add .
 ```
-    
-或者只是添加某个文件：
+
+或者只是新增某個檔案：
 
 ```
 $ git add -p
 ````
 
-我们可以输入
+我們可以輸入
 
 ```
 $git status
 ```
 
-来看现在的状态，如下图是添加之前的：
+來看現在的狀態，如下圖是新增之前的：
 
 ![Before add](./img/before-add.png)
 
-下面是添加之后 的
+下面是新增之後 的
 
 ![After add](./img/after-add.png)
 
-可以看到状态的变化是从黄色到绿色，即unstage到add。
+可以看到狀態的變化是從黃色到綠色，即unstage到add。
 
 
 ##GitHub
 
-Wiki百科上是这么说的
+Wiki百科上是這麼說的
 
-> GitHub 是一个共享虚拟主机服务，用于存放使用Git版本控制的软件代码和内容项目。它由GitHub公司（曾称Logical Awesome）的开发者Chris Wanstrath、PJ Hyett和Tom Preston-Werner
-使用Ruby on Rails编写而成。
+> GitHub 是一個共享虛擬主機服務，用於存放使用Git版本控制的軟體程式碼和內容項目。它由GitHub公司（曾稱Logical Awesome）的開發者Chris Wanstrath、PJ Hyett和Tom Preston-Werner
+使用Ruby on Rails編寫而成。
 
-当然让我们看看官方的介绍:
+當然讓我們看看官方的介紹:
 
 > GitHub is the best place to share code with friends, co-workers, classmates, and complete strangers. Over eight million people use GitHub to build amazing things together.
 
 
-它还是什么?
+它還是什麼?
 
-- 网站
-- 免费博客
-- 管理配置文件
-- 收集资料
-- 简历
-- 管理代码片段
-- 托管编程环境
-- 写作
+- 網站
+- 免費部落格
+- 管理配置檔案
+- 收集資料
+- 簡歷
+- 管理程式碼片段
+- 託管程式設計環境
+- 寫作
 
-等等。看上去像是大餐，但是你还需要了解点什么?
+等等。看上去像是大餐，但是你還需要了解點什麼?
 
-###版本管理与软件部署
+###版本管理與軟體部署
 
-jQuery[^jQuery]在发布版本``2.1.3``，一共有152个commit。我们可以看到如下的提交信息:
+jQuery[^jQuery]在釋出版本``2.1.3``，一共有152個commit。我們可以看到如下的提交資訊:
 
  - Ajax: Always use script injection in globalEval …	 bbdfbb4
  - Effects: Reintroduce use of requestAnimationFrame …	 72119e0
@@ -101,23 +101,23 @@ jQuery[^jQuery]在发布版本``2.1.3``，一共有152个commit。我们可以�
  - Build: Update commitplease dev dependency
  - ...
 
-###GitHub与Git
+###GitHub與Git
 
-> Git是一个分布式的版本控制系统，最初由Linus Torvalds编写，用作Linux内核代码的管理。在推出后，Git在其它项目中也取得了很大成功，尤其是在Ruby社区中。目前，包括Rubinius、Merb和Bitcoin在内的很多知名项目都使用了Git。Git同样可以被诸如Capistrano和Vlad the Deployer这样的部署工具所使用。
+> Git是一個分散式的版本控制系統，最初由Linus Torvalds編寫，用作Linux核心程式碼的管理。在推出後，Git在其它項目中也取得了很大成功，尤其是在Ruby社羣中。目前，包括Rubinius、Merb和Bitcoin在內的很多知名項目都使用了Git。Git同樣可以被諸如Capistrano和Vlad the Deployer這樣的部署工具所使用。
 
-> GitHub可以托管各种git库，并提供一个web界面，但与其它像 SourceForge或Google Code这样的服务不同，GitHub的独特卖点在于从另外一个项目进行分支的简易性。为一个项目贡献代码非常简单：首先点击项目站点的“fork”的按钮，然后将代码检出并将修改加入到刚才分出的代码库中，最后通过内建的“pull request”机制向项目负责人申请代码合并。已经有人将GitHub称为代码玩家的MySpace。
+> GitHub可以託管各種git庫，並提供一個web介面，但與其它像 SourceForge或Google Code這樣的服務不同，GitHub的獨特賣點在於從另外一個項目進行分支的簡易性。為一個項目貢獻程式碼非常簡單：首先點選項目站點的“fork”的按鈕，然後將程式碼檢出並將修改加入到剛才分出的程式碼庫中，最後通過內建的“pull request”機制向項目負責人申請程式碼合併。已經有人將GitHub稱為程式碼玩家的MySpace。
 
-###在GitHub创建项目
+###在GitHub建立項目
 
-接着,我们试试在上面创建一个项目:
+接著,我們試試在上面建立一個項目:
 
 ![GitHub Roam](./img/github-roam-create.jpg)
 
-就会有下面的提醒:
+就會有下面的提醒:
 
 ![GitHub Roam](./img/project-init.jpg)
 
-它提供多种方式的创建方法:
+它提供多種方式的建立方法:
 
 > …or create a new repository on the command line
 
@@ -129,21 +129,21 @@ git commit -m "first commit"
 git remote add origin git@github.com:phodal/github-roam.git
 git push -u origin master
 ```
-	
+
 > …or push an existing repository from the command line
 
 ```
 git remote add origin git@github.com:phodal/github-roam.git
 git push -u origin master
-```		
-	
-如果你完成了上面的步骤之后,那么我想你想知道你需要怎样的项目。
+```
 
-##GitHub流行项目分析
+如果你完成了上面的步驟之後,那麼我想你想知道你需要怎樣的項目。
 
-之前曾经分析过一些GitHub的用户行为，现在我们先来说说GitHub上的Star吧。(截止: 2015年3月9日23时。)
+##GitHub流行項目分析
 
-用户  | 项目名    | Language | Star | Url
+之前曾經分析過一些GitHub的使用者行為，現在我們先來說說GitHub上的Star吧。(截止: 2015年3月9日23時。)
+
+使用者  | 項目名    | Language | Star | Url
 -----|---------- |----------|------|----
 twbs | Bootstrap | CSS      | 78490 | [https://github.com/twbs/bootstrap](https://github.com/twbs/bootstrap)
 vhf |free-programming books | - | 37240 | [https://github.com/vhf/free-programming-books](https://github.com/vhf/free-programming-books)
@@ -151,45 +151,45 @@ angular | angular.js | JavaScript | 36,061 | [https://github.com/angular/angular
 mbostock | d3 | JavaScript | 35,257 | [https://github.com/mbostock/d3](https://github.com/mbostock/d3)
 joyent | node | JavaScript | 35,077 | [https://github.com/joyent/node](https://github.com/joyent/node)
 
-上面列出来的是前5的，看看大于1万个stars的项目的分布，一共有82个:
+上面列出來的是前5的，看看大於1萬個stars的項目的分佈，一共有82個:
 
-语言 | 项目数
+語言 | 項目數
 -----|-----
 JavaScript | 37
-Ruby | 6 
-CSS | 6 
-Python | 4 
-HTML | 3 
-C++ | 3 
-VimL | 2 
-Shell | 2 
-Go | 2 
-C | 2 
+Ruby | 6
+CSS | 6
+Python | 4
+HTML | 3
+C++ | 3
+VimL | 2
+Shell | 2
+Go | 2
+C | 2
 
-类型分布:
+類型分佈:
 
 
- - 库和框架: 如``jQuery`` 
- - 系统: 如``Linux``、``hhvm``、``docker``
+ - 庫和框架: 如``jQuery``
+ - 系統: 如``Linux``、``hhvm``、``docker``
  - 配置集: 如``dotfiles``
- - 辅助工具: 如``oh-my-zsh``
+ - 輔助工具: 如``oh-my-zsh``
  - 工具: 如``Homewbrew``和``Bower``
- - 资料收集: 如``free programming books``，``You-Dont-Know-JS``，``Font-Awesome``
- - 其他:简历如``Resume``
- 
+ - 資料收集: 如``free programming books``，``You-Dont-Know-JS``，``Font-Awesome``
+ - 其他:簡歷如``Resume``
+
 ##Pull Request
 
-除了创建项目之外，我们也可以创建Pull Request来做贡献。
+除了建立項目之外，我們也可以建立Pull Request來做貢獻。
 
-###我的第一个PR
+###我的第一個PR
 
-我的第一个PR是给一个小的Node的CoAP相关的库的Pull Request。原因比较简单，是因为它的README.md写错了，导致我无法办法进行下一步。
+我的第一個PR是給一個小的Node的CoAP相關的庫的Pull Request。原因比較簡單，是因為它的README.md寫錯了，導致我無法辦法進行下一步。
 
 		 const dgram       = require('dgram')
 		-    , coapPacket  = require('coap-packet')
 		+    , package     = require('coap-packet')
 
-很简单，却又很有用的步骤，另外一个也是：
+很簡單，卻又很有用的步驟，另外一個也是：
 
 ```
  else
@@ -200,20 +200,20 @@ C | 2
  END
    exit 1
  fi
-``` 
+```
 
 ###CLA
 
-CLA即Contributor License Agreement，在为一些大的组织、机构提交Pull Request的时候，可能需要签署这个协议。他们会在你的Pull Request里问你，只有你到他们的网站去注册并同意协议才会接受你的PR。
+CLA即Contributor License Agreement，在為一些大的組織、機構提交Pull Request的時候，可能需要簽署這個協議。他們會在你的Pull Request裡問你，只有你到他們的網站去註冊並同意協議才會接受你的PR。
 
-以下是我为Google提交的一个PR
+以下是我為Google提交的一個PR
 
 ![Google CLA](./img/google-cla.png)
 
-以及Eclipse的一个PR
+以及Eclipse的一個PR
 
 ![Eclipse CLA](./img/eclipse-cla.png)
 
-他们都要求我签署CLA。
+他們都要求我簽署CLA。
 
  <hr>

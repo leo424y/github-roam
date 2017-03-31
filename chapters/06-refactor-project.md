@@ -1,36 +1,36 @@
-#重构
+#重構
 
-或许你应该知道了，重构是怎样的，你也知道重构能带来什么。在我刚开始学重构和设计模式的时候，我需要去找一些好的示例，以便于我更好的学习。有时候不得不创造一些更好的场景，来实现这些功能。
+或許你應該知道了，重構是怎樣的，你也知道重構能帶來什麼。在我剛開始學重構和設計模式的時候，我需要去找一些好的示例，以便於我更好的學習。有時候不得不創造一些更好的場景，來實現這些功能。
 
-有一天，我发现当我需要我一次又一次地重复讲述某些内容，于是我就计划着把这些应该掌握的技能放到GitHub上，也就有了[Artisan Stack](https://github.com/artisanstack) 计划。
+有一天，我發現當我需要我一次又一次地重複講述某些內容，於是我就計劃著把這些應該掌握的技能放到GitHub上，也就有了[Artisan Stack](https://github.com/artisanstack) 計劃。
 
-每个程序员都不可避免地是一个Coder，一个没有掌握好技能的Coder，算不上是手工艺人，但是是手工人。
+每個程式設計師都不可避免地是一個Coder，一個沒有掌握好技能的Coder，算不上是手工藝人，但是是手工人。
 
-艺，需要有创造性的方法。
+藝，需要有創造性的方法。
 
-##为什么重构?
+##為什麼重構?
 
-> 为了更好的代码。
+> 為了更好的程式碼。
 
-在经历了一年多的工作之后，我平时的主要工作就是修Bug。刚开始的时候觉得无聊，后来才发现修Bug需要更好的技术。有时候你可能要面对着一坨一坨的代码，有时候你可能要花几天的时间去阅读代码。而，你重写那几十代码可能只会花上你不到一天的时间。但是如果你没办法理解当时为什么这么做，你的修改只会带来更多的bug。修Bug，更多的是维护代码。还是前人总结的那句话对:
+在經歷了一年多的工作之後，我平時的主要工作就是修Bug。剛開始的時候覺得無聊，後來才發現修Bug需要更好的技術。有時候你可能要面對著一坨一坨的程式碼，有時候你可能要花幾天的時間去閱讀程式碼。而，你重寫那幾十程式碼可能只會花上你不到一天的時間。但是如果你沒辦法理解當時為什麼這麼做，你的修改只會帶來更多的bug。修Bug，更多的是維護程式碼。還是前人總結的那句話對:
 
-> 写代码容易，读代码难。
+> 寫程式碼容易，讀程式碼難。
 
-假设我们写这些代码只要半天，而别人读起来要一天。为什么不试着用一天的时候去写这些代码，让别人花半天或者更少的时间来理解。
+假設我們寫這些程式碼只要半天，而別人讀起來要一天。為什麼不試著用一天的時候去寫這些程式碼，讓別人花半天或者更少的時間來理解。
 
-如果你的代码已经上线，虽然是一坨坨的。但是不要轻易尝试，``没有测试的重构``。
+如果你的程式碼已經上線，雖然是一坨坨的。但是不要輕易嘗試，``沒有測試的重構``。
 
-从前端开始的原因在于，写得一坨坨且最不容易测试的代码都在前端。
+從前端開始的原因在於，寫得一坨坨且最不容易測試的程式碼都在前端。
 
-让我们来看看我们的第一个训练，相当有挑战性。
+讓我們來看看我們的第一個訓練，相當有挑戰性。
 
-##重构uMarkdown
+##重構uMarkdown
 
-代码及setup请见github: [js-refactor](https://github.com/artisanstack/js-refactor)
+程式碼及setup請見github: [js-refactor](https://github.com/artisanstack/js-refactor)
 
-###代码说明
+###程式碼說明
 
-``uMarkdown``是一个用于将Markdown转化为HTML的库。代码看上去就像一个很典型的过程代码:
+``uMarkdown``是一個用於將Markdown轉化為HTML的庫。程式碼看上去就像一個很典型的過程程式碼:
 
 ```javascript
 /* code */
@@ -50,11 +50,11 @@ while ((stra = micromarkdown.regexobject.mail.exec(str)) !== null) {
 }
 ```
 
-选这个做重构的开始，不仅仅是因为之前在写[EchoesWorks](https://github.com/phodal/echoesworks)的时候进行了很多的重构。而且它更适合于，``重构到设计模式``的理论。让我们在重构完之后，给作者进行pull request吧。
+選這個做重構的開始，不僅僅是因為之前在寫[EchoesWorks](https://github.com/phodal/echoesworks)的時候進行了很多的重構。而且它更適合於，``重構到設計模式``的理論。讓我們在重構完之後，給作者進行pull request吧。
 
-Markdown的解析过程，有点类似于``Pipe and Filters``模式(架构模式)。
+Markdown的解析過程，有點類似於``Pipe and Filters``模式(架構模式)。
 
-Filter即我们在代码中看到的正规表达式集:
+Filter即我們在程式碼中看到的正規表示式集:
 
 ```javascript
 regexobject: {
@@ -62,13 +62,13 @@ regexobject: {
     code: /\s\`\`\`\n?([^`]+)\`\`\`/g
 ```
 
-他会匹配对应的Markdown类型，随后进行替换和处理。而``str```，就是管理口的输入和输出。
+他會匹配對應的Markdown類型，隨後進行替換和處理。而``str```，就是管理口的輸入和輸出。
 
-接着，我们就可以对其进行简单的重构。
+接著，我們就可以對其進行簡單的重構。
 
-(ps: 推荐用WebStrom来做重构，自带重构功能)
+(ps: 推薦用WebStrom來做重構，自帶重構功能)
 
-作为一个示例，我们先提出codeHandler方法，即将上面的
+作為一個示例，我們先提出codeHandler方法，即將上面的
 
 ```javascript
 /* code */
@@ -76,16 +76,16 @@ while ((stra = micromarkdown.regexobject.code.exec(str)) !== null) {
   str = str.replace(stra[0], '<code>\n' + micromarkdown.htmlEncode(stra[1]).replace(/\n/gm, '<br/>').replace(/\ /gm, '&nbsp;') + '</code>\n');
 }
 ```
-    
+
 提取方法成
 
 ```javascript
 codeFilter: function (str, stra) {
     return str.replace(stra[0], '<code>\n' + micromarkdown.htmlEncode(stra[1]).replace(/\n/gm, '<br/>').replace(/\ /gm, '&nbsp;') + '</code>\n');
-  },    
+  },
 ```
 
-while语句就成了
+while語句就成了
 
 ```javascript
 while ((stra = regexobject.code.exec(str)) !== null) {
@@ -93,13 +93,13 @@ while ((stra = regexobject.code.exec(str)) !== null) {
 }
 ```
 
-然后，运行所有的测试。
+然後，執行所有的測試。
 
 ```
 grunt test
 ```
 
-同理我们就可以``mail``、``headline``等方法进行重构。接着就会变成类似于下面的代码，
+同理我們就可以``mail``、``headline``等方法進行重構。接著就會變成類似於下面的程式碼，
 
 ```javascript
 /* code */
@@ -122,8 +122,8 @@ while ((execStr = regExpObject.tables.exec(str)) !== null) {
 str = tableHandler(str, execStr, strict);
 }
 ```
-	  
-然后你也看到了，上面有一堆重复的代码，接着让我们用JavaScript的``奇技浮巧``，即apply方法，把上面的重复代码变成。
+
+然後你也看到了，上面有一堆重複的程式碼，接著讓我們用JavaScript的``奇技浮巧``，即apply方法，把上面的重複程式碼變成。
 
 ```javascript
 ['code', 'headline', 'lists', 'tables', 'links', 'mail', 'url', 'smlinks', 'hr'].forEach(function (type) {
@@ -132,8 +132,8 @@ str = tableHandler(str, execStr, strict);
     }
 });
 ```
-		
-进行测试，blabla，都是过的。
+
+進行測試，blabla，都是過的。
 
 ```javascript
  Markdown
@@ -146,21 +146,21 @@ str = tableHandler(str, execStr, strict);
    ✓ should parse ul table
    ✓ should return correctly class name
 ```
-	   
-快来试试吧， [https://github.com/artisanstack/js-refactor](https://github.com/artisanstack/js-refactor)
 
-是时候讨论这个Refactor利器了，最初看到这个重构的过程是从ThoughtWorks郑大晔校开始的，只是之前对于Java的另外一个编辑器Eclipse的坏感。。这些在目前已经不是很重要了，试试这个公司里面应用广泛的编辑器。
+快來試試吧， [https://github.com/artisanstack/js-refactor](https://github.com/artisanstack/js-refactor)
 
-##Intellij Idea重构
+是時候討論這個Refactor利器了，最初看到這個重構的過程是從ThoughtWorks鄭大曄校開始的，只是之前對於Java的另外一個編輯器Eclipse的壞感。。這些在目前已經不是很重要了，試試這個公司裡面應用廣泛的編輯器。
 
-开发的流程大致就是这样子的，测试先行算是推荐的。
+##Intellij Idea重構
 
-    编写测试->功能代码->修改测试->重构
-    
-上次在和buddy聊天的时候，才知道测试在功能简单的时候是后行的，在功能复杂不知道怎么下手的时候是先行的。
+開發的流程大致就是這樣子的，測試先行算是推薦的。
+
+    編寫測試->功能程式碼->修改測試->重構
+
+上次在和buddy聊天的時候，才知道測試在功能簡單的時候是後行的，在功能複雜不知道怎麼下手的時候是先行的。
 
 
-开始之前请原谅我对于Java语言的一些无知，然后，看一下我写的Main函数：
+開始之前請原諒我對於Java語言的一些無知，然後，看一下我寫的Main函數：
 
 ```java
 package com.phodal.learing;
@@ -176,19 +176,19 @@ public class Main {
     }
 }
 ```
-	
-代码写得还好(自我感觉)，先不管Cal和Cal2两个类。大部分都能看懂，除了c,d不知道他们表达的是什么意思，于是。
+
+程式碼寫得還好(自我感覺)，先不管Cal和Cal2兩個類。大部分都能看懂，除了c,d不知道他們表達的是什麼意思，於是。
 
 ###Rename
 
-**快捷键:Shift+F6**
+**快捷鍵:Shift+F6**
 
-**作用:重命名**
+**作用:重新命名**
 
- - 把光标丢到int c中的c，按下shift+f6，输入result_add
- - 把光标移到int d中的d，按下shift+f6，输入result_sub
+ - 把游標丟到int c中的c，按下shift+f6，輸入result_add
+ - 把游標移到int d中的d，按下shift+f6，輸入result_sub
 
-于是就有
+於是就有
 
 ```java
 package com.phodal.learing;
@@ -204,18 +204,18 @@ public class Main {
     }
 }
 ```
-	
+
 ###Extract Method
 
-**快捷键:alt+command+m**
+**快捷鍵:alt+command+m**
 
-**作用:扩展方法**
+**作用:擴充套件方法**
 
-- 选中System.out.println(result_add);
+- 選中System.out.println(result_add);
 - 按下alt+command+m
-- 在弹出的窗口中输入mprint
+- 在彈出的視窗中輸入mprint
 
-于是有了
+於是有了
 
 ```java
 public static void main(String[] args) {
@@ -230,20 +230,20 @@ private static void mprint(int result_sub) {
     System.out.println(result_sub);
 }
 ```
-    
-似乎我们不应该这样对待System.out.println，那么让我们内联回去
+
+似乎我們不應該這樣對待System.out.println，那麼讓我們內聯回去
 
 ###Inline Method
 
-**快捷键:alt+command+n**
+**快捷鍵:alt+command+n**
 
-**作用:内联方法**
+**作用:內聯方法**
 
-- 选中main中的mprint
+- 選中main中的mprint
 - alt+command+n
-- 选中Inline all invocations and remove the method(2 occurrences) 点确定
+- 選中Inline all invocations and remove the method(2 occurrences) 點確定
 
-然后我们等于什么也没有做了~~: 
+然後我們等於什麼也沒有做了~~:
 
 ```java
 public static void main(String[] args) {
@@ -255,11 +255,11 @@ public static void main(String[] args) {
 }
 ```
 
-似乎这个例子不是很好，但是够用来说明了。
+似乎這個例子不是很好，但是夠用來說明了。
 
 ###Pull Members Up
 
-开始之前让我们先看看Cal2类:
+開始之前讓我們先看看Cal2類:
 
 ```java
 public class Cal2 extends Cal {
@@ -269,8 +269,8 @@ public class Cal2 extends Cal {
     }
 }
 ```
-	
-以及Cal2的父类Cal
+
+以及Cal2的父類Cal
 
 ```java
 public class Cal {
@@ -281,8 +281,8 @@ public class Cal {
 
 }
 ```
-	
-最后的结果，就是将Cal2类中的sub方法，提到父类:
+
+最後的結果，就是將Cal2類中的sub方法，提到父類:
 
 ```java
 public class Cal {
@@ -296,26 +296,26 @@ public class Cal {
     }
 }
 ```
-	
-而我们所要做的就是鼠标右键
 
-###重构之以查询取代临时变量
+而我們所要做的就是滑鼠右鍵
 
-快捷键
+###重構之以查詢取代臨時變數
+
+快捷鍵
 
 Mac:  木有
 
 Windows/Linux:  木有
 
-或者: ``Shift``+``alt``+``command``+``T`` 再选择  ``Replace Temp with Query``
+或者: ``Shift``+``alt``+``command``+``T`` 再選擇  ``Replace Temp with Query``
 
-鼠标: **Refactor** | ``Replace Temp with Query``
+滑鼠: **Refactor** | ``Replace Temp with Query``
 
-####重构之前
+####重構之前
 
-过多的临时变量会让我们写出更长的函数，函数不应该太多，以便使功能单一。这也是重构的另外的目的所在，只有函数专注于其功能，才会更容易读懂。
+過多的臨時變數會讓我們寫出更長的函數，函數不應該太多，以便使功能單一。這也是重構的另外的目的所在，只有函數專注於其功能，才會更容易讀懂。
 
-以书中的代码为例
+以書中的程式碼為例
 
 ```java
 import java.lang.System;
@@ -332,13 +332,13 @@ public class replaceTemp {
 }
 ```
 
-####重构
+####重構
 
-选中``basePrice``很愉快地拿鼠标点上面的重构
+選中``basePrice``很愉快地拿滑鼠點上面的重構
 
 ![Replace Temp With Query](./img/replace.jpg)
 
-便会返回
+便會返回
 
 ```java
 import java.lang.System;
@@ -358,19 +358,19 @@ public class replaceTemp {
 }
 ```
 
-而实际上我们也可以
+而實際上我們也可以
 
-1. 选中
+1. 選中
 
     _quantity * _itemPrice
 
-2. 对其进行``Extrace Method``
+2. 對其進行``Extrace Method``
 
-3. 选择``basePrice``再``Inline Method``
+3. 選擇``basePrice``再``Inline Method``
 
-####Intellij IDEA重构
+####Intellij IDEA重構
 
-在Intellij IDEA的文档中对此是这样的例子
+在Intellij IDEA的文件中對此是這樣的例子
 
 ```java
 public class replaceTemp {
@@ -384,11 +384,11 @@ public class replaceTemp {
 }
 ```
 
-接着我们选中``aString``，再打开重构菜单，或者
+接著我們選中``aString``，再開啟重構選單，或者
 
-``Command``+``Alt``+``Shift``+``T`` 再选中Replace Temp with Query
+``Command``+``Alt``+``Shift``+``T`` 再選中Replace Temp with Query
 
-便会有下面的结果:
+便會有下面的結果:
 
 
 ```javas

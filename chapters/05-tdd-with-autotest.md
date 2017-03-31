@@ -1,18 +1,18 @@
-#测试
+#測試
 
 ##TDD
 
-虽然接触的TDD时间不算短，然而真正在实践TDD上的时候少之又少。除去怎么教人TDD，就是与人结对编程时的switch，或许是受限于当前的开发流程。
+雖然接觸的TDD時間不算短，然而真正在實踐TDD上的時候少之又少。除去怎麼教人TDD，就是與人結對程式設計時的switch，或許是受限於當前的開發流程。
 
-偶然间在开发一个物联网相关的开源项目——[Lan](https://github.com/phodal/lan)的时候，重拾了这个过程。不得不说提到的一点是，在我们的开发流程中**测试是由相关功能开发人员写的**，有时候测试是一种很具挑战性的工作。久而久之，为自己的开源项目写测试变成一种自然而然的事。有时没有测试，反而变得**没有安全感**。
+偶然間在開發一個物聯網相關的開源項目——[Lan](https://github.com/phodal/lan)的時候，重拾了這個過程。不得不說提到的一點是，在我們的開發流程中**測試是由相關功能開發人員寫的**，有時候測試是一種很具挑戰性的工作。久而久之，為自己的開源項目寫測試變成一種自然而然的事。有時沒有測試，反而變得**沒有安全感**。
 
-###一次测试驱动开发
+###一次測試驅動開發
 
-之前正在重写一个[物联网](http://www.phodal.com/iot)的服务端，主要便是结合CoAP、MQTT、HTTP等协议构成一个物联网的云服务。现在，主要的任务是集中于协议与授权。由于，不同协议间的授权是不一样的，最开始的时候我先写了一个http put授权的功能，而在起先的时候是如何测试的呢?
+之前正在重寫一個[物聯網](http://www.phodal.com/iot)的服務端，主要便是結合CoAP、MQTT、HTTP等協議構成一個物聯網的雲服務。現在，主要的任務是集中於協議與授權。由於，不同協議間的授權是不一樣的，最開始的時候我先寫了一個http put授權的功能，而在起先的時候是如何測試的呢?
 
     curl --user root:root -X PUT -d '{ "dream": 1 }' -H "Content-Type: application/json" http://localhost:8899/topics/test
 
-我只要顺利在request中看有无``req.headers.authorization``，我便可以继续往下，接着给个判断。毕竟，我们对HTTP协议还是蛮清楚的。
+我只要順利在request中看有無``req.headers.authorization``，我便可以繼續往下，接著給個判斷。畢竟，我們對HTTP協議還是蠻清楚的。
 
 ```javascript
 if (!req.headers.authorization) {
@@ -20,21 +20,21 @@ if (!req.headers.authorization) {
   res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');
   return res.end('Unauthorized');
 }
-```       
-       
-可是除了HTTP协议，还有MQTT和CoAP。对于MQTT协议来说，那还算好，毕竟自带授权，如:
+```
+
+可是除了HTTP協議，還有MQTT和CoAP。對於MQTT協議來說，那還算好，畢竟自帶授權，如:
 
 ```bash
 mosquitto_pub -u root -P root -h localhost -d -t lettuce -m "Hello, MQTT. This is my first message."
 ```
-       
-便可以让我们简单地完成这个功能，然而有的协议是没有这样的功能如CoAP协议中是用Option来进行授权的。现在的工具如libcoap只能有如下的简单功能
+
+便可以讓我們簡單地完成這個功能，然而有的協議是沒有這樣的功能如CoAP協議中是用Option來進行授權的。現在的工具如libcoap只能有如下的簡單功能
 
 ```bash
 coap-client -m get coap://127.0.0.1:5683/topics/zero -T
 ```
 
-于是，先写了个测试脚本来验证功能。
+於是，先寫了個測試指令碼來驗證功能。
 
 ```javascript
 var coap     = require('coap');
@@ -50,69 +50,69 @@ req.setOption('Block2',  [new Buffer('phodal'), new Buffer('phodal')]);
 
 req.end();
 ```
-	
-写完测试脚本后发现不对了，这个不应该是测试的代码吗? 于是将其放到了spec中，接着发现了上面的全部功能的实现过程为什么不用TDD实现呢？
 
-###说说TDD
+寫完測試指令碼後發現不對了，這個不應該是測試的程式碼嗎? 於是將其放到了spec中，接著發現了上面的全部功能的實現過程為什麼不用TDD實現呢？
 
-测试驱动开发是一个很"古老"的程序开发方法，然而由于国内的开发流程的问题——即开发人员负责功能的测试，导致这么好的一项技术没有在国内推广。
+###說說TDD
 
-测试驱动开发的主要过程是:
+測試驅動開發是一個很"古老"的程式開發方法，然而由於國內的開發流程的問題——即開發人員負責功能的測試，導致這麼好的一項技術沒有在國內推廣。
 
-1. 先写功能的测试
-2. 实现功能代码
-3. 提交代码(commit -> 保证功能正常)
-4. 重构功能代码
+測試驅動開發的主要過程是:
 
-而对于这样的一个物联网项目来说，我已经有了几个有利的前提:
+1. 先寫功能的測試
+2. 實現功能程式碼
+3. 提交程式碼(commit -> 保證功能正常)
+4. 重構功能程式碼
 
-1. 已经有了原型
-2. 框架设计
+而對於這樣的一個物聯網項目來說，我已經有了幾個有利的前提:
+
+1. 已經有了原型
+2. 框架設計
 
 ###TDD思考
 
-通常在我的理解下，TDD是可有可无的。既然我知道了我要实现的大部分功能，而且我也知道如何实现。与此同时，对Code Smell也保持着警惕、要保证功能被测试覆盖。那么，总的来说TDD带来的价值并不大。
+通常在我的理解下，TDD是可有可無的。既然我知道了我要實現的大部分功能，而且我也知道如何實現。與此同時，對Code Smell也保持著警惕、要保證功能被測試覆蓋。那麼，總的來說TDD帶來的價值並不大。
 
-然而，在当前这种情况下，我知道我想要的功能，但是我并不理解其深层次的功能。我需要花费大量的时候来理解，它为什么是这样的，需要先有一些脚本来知道它是怎么工作的。TDD变显得很有价值，换句话来说，在现有的情况下，TDD对于我们不了解的一些事情，可以驱动出更多的开发。毕竟在我们完成测试脚本之后，我们也会发现这些测试脚本成为了代码的一部分。
+然而，在當前這種情況下，我知道我想要的功能，但是我並不理解其深層次的功能。我需要花費大量的時候來理解，它為什麼是這樣的，需要先有一些指令碼來知道它是怎麼工作的。TDD變顯得很有價值，換句話來說，在現有的情況下，TDD對於我們不瞭解的一些事情，可以驅動出更多的開發。畢竟在我們完成測試指令碼之後，我們也會發現這些測試指令碼成為了程式碼的一部分。
 
-在这种理想的情况下，我们为什么不TDD呢?
+在這種理想的情況下，我們為什麼不TDD呢?
 
 
-##功能测试
+##功能測試
 
-###轻量级网站测试TWill
+###輕量級網站測試TWill
 
 > twill was initially designed for testing Web sites, although since then people have also figured out that it's good for browsing unsuspecting Web sites.
 
-之所以说轻量的原因是他是拿命令行测试的，还有DSL，还有Python。
+之所以說輕量的原因是他是拿命令列測試的，還有DSL，還有Python。
 
-除此之外，还可以拿它做压力测试，这种压力测试和一般的不一样。可以模拟整个过程，比如同时有多少人登陆你的网站。
+除此之外，還可以拿它做壓力測試，這種壓力測試和一般的不一樣。可以模擬整個過程，比如同時有多少人登陸你的網站。
 
-不过，它有一个限制是没有JavaScript。
+不過，它有一個限制是沒有JavaScript。
 
-看了一下源码，大概原理就是用``requests``下载html，接着用``lxml``解析html，比较有意思的是内嵌了一个``DSL``。
+看了一下源碼，大概原理就是用``requests``下載html，接著用``lxml``解析html，比較有意思的是內嵌了一個``DSL``。
 
-这是一个Python的库。
+這是一個Python的庫。
 
      pip install twill
 
-###Twill 登陆测试
+###Twill 登陸測試
 
-1.启动我们的应用。
+1.啟動我們的應用。
 
-2.进入twill shell
+2.進入twill shell
 
     twill-sh
      -= Welcome to twill! =-
     current page:  *empty page*
 
-3.打开网页
+3.開啟網頁
 
     >> go http://127.0.0.1:5000/login
     ==> at http://127.0.0.1:5000/login
     current page: http://127.0.0.1:5000/login
 
-4.显示表单
+4.顯示錶單
 
     	>> showforms
 
@@ -125,7 +125,7 @@ req.end();
 
 	current page: http://127.0.0.1:5000/login
 
-5.填充表单
+5.填充表單
 
     formclear 1
     fv 1 email test@tes.com
@@ -135,17 +135,17 @@ req.end();
 
     formaction 1 http://127.0.0.1:5000/login
 
-7.提交表单
+7.提交表單
 
     >> submit
     Note: submit is using submit button: name="login", value="登入"
     current page: http://127.0.0.1:5000/
 
-发现重定向到首页了。
+發現重定向到首頁了。
 
-###Twill 测试脚本
+###Twill 測試指令碼
 
-当然我们也可以用脚本直接来测试``login.twill``:
+當然我們也可以用指令碼直接來測試``login.twill``:
 
 	go http://127.0.0.1:5000/login
 
@@ -158,11 +158,11 @@ req.end();
 
 	go http://127.0.0.1:5000/logout
 
-运行
+執行
 
      twill-sh login.twill
 
-结果
+結果
 
 	>> EXECUTING FILE login.twill
 	AT LINE: login.twill:0
@@ -189,15 +189,15 @@ req.end();
 	--
 	1 of 1 files SUCCEEDED.
 
-一个成功的测试诞生了。
+一個成功的測試誕生了。
 
 ##Fake Server
 
-实践了一下怎么用sinon去fake server，还没用respondWith，于是写一下。
+實踐了一下怎麼用sinon去fake server，還沒用respondWith，於是寫一下。
 
-这里需要用到sinon框架来测试。
+這裡需要用到sinon框架來測試。
 
-当我们fetch的时候，我们就可以返回我们想要fake的结果。
+當我們fetch的時候，我們就可以返回我們想要fake的結果。
 
         var data = {"id":1,"name":"Rice","type":"Good","price":12,"quantity":1,"description":"Made in China"};
 	beforeEach(function() {
@@ -214,13 +214,13 @@ req.end();
 		);
 	});
 
-于是在afterEach的时候，我们需要恢复这个server。
+於是在afterEach的時候，我們需要恢復這個server。
 
 	afterEach(function() {
 		this.server.restore();
 	});
 
-接着写一个jasmine测试来测试
+接著寫一個jasmine測試來測試
 
 	describe("Collection Test", function() {
 		it("should get data from the url", function() {
@@ -235,5 +235,5 @@ req.end();
 				.toEqual(data);
 		});
 	});
-	
+
 ---

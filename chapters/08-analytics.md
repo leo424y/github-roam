@@ -1,24 +1,24 @@
-#GitHub用户分析
+#GitHub使用者分析
 
-##生成图表
+##生成圖表
 
-如何分析用户的数据是一个有趣的问题，特别是当我们有大量的数据的时候。除了``matlab``，我们还可以用``numpy``+``matplotlib``
+如何分析使用者的資料是一個有趣的問題，特別是當我們有大量的資料的時候。除了``matlab``，我們還可以用``numpy``+``matplotlib``
 
-数据可以在这边寻找到
+資料可以在這邊尋找到
 
 [https://github.com/gmszone/ml](https://github.com/gmszone/ml)
 
-最后效果图
+最後效果圖
 
 ![2014 01 01](./img/2014-01-01.png)
 
-要解析的json文件位于``data/2014-01-01-0.json``，大小6.6M，显然我们可能需要用每次只读一行的策略，这足以解释为什么诸如sublime打开的时候很慢，而现在我们只需要里面的json数据中的创建时间。。
+要解析的json檔案位於``data/2014-01-01-0.json``，大小6.6M，顯然我們可能需要用每次只讀一行的策略，這足以解釋為什麼諸如sublime開啟的時候很慢，而現在我們只需要裡面的json資料中的建立時間。。
 
-==,这个文件代表什么？
+==,這個檔案代表什麼？
 
-**2014年1月1日零时到一时，用户在github上的操作，这里的用户指的是很多。。一共有4814条数据，从commit、create到issues都有。**
+**2014年1月1日零時到一時，使用者在github上的操作，這裡的使用者指的是很多。。一共有4814條資料，從commit、create到issues都有。**
 
-###数据解析
+###資料解析
 
 ```python
 import json
@@ -26,7 +26,7 @@ for line in open(jsonfile):
     line = f.readline()
 ```
 
-然后再解析json
+然後再解析json
 
 ```python
 import dateutil.parser
@@ -35,7 +35,7 @@ lin = json.loads(line)
 date = dateutil.parser.parse(lin["created_at"])
 ```
 
-这里用到了``dateutil``，因为新鲜出炉的数据是string需要转换为``dateutil``，再到数据放到数组里头。最后有就有了``parse_data``
+這裡用到了``dateutil``，因為新鮮出爐的資料是string需要轉換為``dateutil``，再到資料放到陣列裡頭。最後有就有了``parse_data``
 
 ```python
 def parse_data(jsonfile):
@@ -55,13 +55,13 @@ def parse_data(jsonfile):
     return minuteswithcount
 ```
 
-下面这句代码就是将上面的解析为
+下面這句程式碼就是將上面的解析為
 
 ```python
 minuteswithcount = [(x, dataarray.count(x)) for x in set(dataarray)]
 ```
 
-这样的数组以便于解析
+這樣的陣列以便於解析
 
 ```python
 [(0, 92), (1, 67), (2, 86), (3, 73), (4, 76), (5, 67), (6, 61), (7, 71), (8, 62), (9, 71), (10, 70), (11, 79), (12, 62), (13, 67), (14, 76), (15, 67), (16, 74), (17, 48), (18, 78), (19, 73), (20, 89), (21, 62), (22, 74), (23, 61), (24, 71), (25, 49), (26, 59), (27, 59), (28, 58), (29, 74), (30, 69), (31, 59), (32, 89), (33, 67), (34, 66), (35, 77), (36, 64), (37, 71), (38, 75), (39, 66), (40, 62), (41, 77), (42, 82), (43, 95), (44, 77), (45, 65), (46, 59), (47, 60), (48, 54), (49, 66), (50, 74), (51, 61), (52, 71), (53, 90), (54, 64), (55, 67), (56, 67), (57, 55), (58, 68), (59, 91)]
@@ -69,16 +69,16 @@ minuteswithcount = [(x, dataarray.count(x)) for x in set(dataarray)]
 
 ###Matplotlib
 
-开始之前需要安装``matplotlib
+開始之前需要安裝``matplotlib
 
 ```bash
 sudo pip install matplotlib
 ```
-然后引入这个库
+然後引入這個庫
 
       import matplotlib.pyplot as plt
 
-如上面的那个结果，只需要
+如上面的那個結果，只需要
 
 <pre><code class="python">
     plt.figure(figsize=(8,4))
@@ -86,8 +86,8 @@ sudo pip install matplotlib
     plt.legend()
     plt.show()
 </code></pre>
-  
-最后代码可见
+
+最後程式碼可見
 
 
 ```python
@@ -134,25 +134,25 @@ def draw_date(files):
 draw_date("data/2014-01-01-0.json")
 ```
 
-##每周分析
+##每週分析
 
-继上篇之后，我们就可以分析用户的每周提交情况，以得出用户的真正的工具效率，每个程序员的工作时间可能是不一样的，如
+繼上篇之後，我們就可以分析使用者的每週提交情況，以得出使用者的真正的工具效率，每個程式設計師的工作時間可能是不一樣的，如
 
 ![Phodal Huang's Report](./img/phodal-results.png)
 
-这是我的每周情况，显然如果把星期六移到前面的话，随着工作时间的增长，在github上的使用在下降，作为一个
+這是我的每週情況，顯然如果把星期六移到前面的話，隨著工作時間的增長，在github上的使用在下降，作為一個
 
       a fulltime hacker who works best in the evening (around 8 pm).
 
-不过这个是osrc的分析结果。
+不過這個是osrc的分析結果。
 
-###python github 每周情况分析
+###python github 每週情況分析
 
-看一张分析后的结果
+看一張分析後的結果
 
 ![Feb Results](./img/feb-results.png)
 
-结果正好与我的情况相反？似乎图上是这么说的，但是数据上是这样的情况。
+結果正好與我的情況相反？似乎圖上是這麼說的，但是資料上是這樣的情況。
 
 	data
 	├── 2014-01-01-0.json
@@ -177,15 +177,15 @@ draw_date("data/2014-01-01-0.json")
 	├── 2014-02-19-0.json
 	└── 2014-02-20-0.json
 
-我们获取是每天晚上0点时的情况，至于为什么是0点，我想这里的数据量可能会比较少。除去1月1号的情况，就是上面的结果，在只有一周的情况时，总会以为因为在国内那时是假期，但是总觉得不是很靠谱，国内的程序员虽然很多，会在github上活跃的可能没有那么多，直至列出每一周的数据时。
+我們獲取是每天晚上0點時的情況，至於為什麼是0點，我想這裡的資料量可能會比較少。除去1月1號的情況，就是上面的結果，在只有一週的情況時，總會以為因為在國內那時是假期，但是總覺得不是很靠譜，國內的程式設計師雖然很多，會在github上活躍的可能沒有那麼多，直至列出每一週的資料時。
 
       6570, 7420, 11274, 12073, 12160, 12378, 12897,
       8474, 7984, 12933, 13504, 13763, 13544, 12940,
       7119, 7346, 13412, 14008, 12555
 
-###Python 数据分析
+###Python 資料分析
 
-重写了一个新的方法用于计算提交数，直至后面才意识到其实我们可以算行数就够了，但是方法上有点hack
+重寫了一個新的方法用於計算提交數，直至後面才意識到其實我們可以算行數就夠了，但是方法上有點hack
 
 ```python
 def get_minutes_counts_with_id(jsonfile):
@@ -230,11 +230,11 @@ def get_month_total():
     return monthdaycount
 ```
 
-接着我们需要去遍历每个结果，后面的后面会发现这个效率真的是太低了，为什么木有多线程？
+接著我們需要去遍歷每個結果，後面的後面會發現這個效率真的是太低了，為什麼木有多執行緒？
 
-###Python Matplotlib图表
+###Python Matplotlib圖表
 
-让我们的matplotlib来做这些图表的工作
+讓我們的matplotlib來做這些圖表的工作
 
 ```python
 if __name__ == '__main__':
@@ -249,17 +249,17 @@ if __name__ == '__main__':
     plt.show()
 ```
 
-蓝色的是第一周，绿色的是第二周，蓝色的是第三周就有了上面的结果。
+藍色的是第一週，綠色的是第二週，藍色的是第三週就有了上面的結果。
 
-我们还需要优化方法，以及多线程的支持。
+我們還需要優化方法，以及多執行緒的支援。
 
-让我们分析之前的程序，然后再想办法做出优化。网上看到一篇文章[http://www.huyng.com/posts/python-performance-analysis/](http://www.huyng.com/posts/python-performance-analysis/)讲的就是分析这部分内容的。
+讓我們分析之前的程式，然後再想辦法做出優化。網上看到一篇文章[http://www.huyng.com/posts/python-performance-analysis/](http://www.huyng.com/posts/python-performance-analysis/)講的就是分析這部分內容的。
 
-##存储到数据库中
+##儲存到資料庫中
 
 ###SQLite3
 
-我们创建了一个名为``userdata.db``的数据库文件，然后创建了一个表，里面有owner,language,eventtype,name url
+我們建立了一個名為``userdata.db``的資料庫檔案，然後建立了一個表，裡面有owner,language,eventtype,name url
 
 ```python
 def init_db():
@@ -268,7 +268,7 @@ def init_db():
     c.execute('''CREATE TABLE userinfo (owner text, language text, eventtype text, name text, url text)''')
 ```
 
-接着我们就可以查询数据，这里从结果讲起。
+接著我們就可以查詢資料，這裡從結果講起。
 
 ```python
 def get_count(username):
@@ -282,7 +282,7 @@ def get_count(username):
     return count, userinfo
 ```
 
-当我查询``gmszone``的时候，也就是我自己就会有如下的结果
+當我查詢``gmszone``的時候，也就是我自己就會有如下的結果
 
 ```bash
 (u'gmszone', u'ForkEvent', u'RESUME', u'TeX', u'https://github.com/gmszone/RESUME')
@@ -297,9 +297,9 @@ def get_count(username):
 109
 ````
 
-一共有109个事件，有``Watch``,``Create``,``Push``,``Fork``还有其他的，
-项目主要有``iot``,``RESUME``,``iot-dashboard``,``wechat-wordpress``,
-接着就是语言了，``Tex``,``Javascript``,``Ruby``,接着就是项目的url了。
+一共有109個事件，有``Watch``,``Create``,``Push``,``Fork``還有其他的，
+項目主要有``iot``,``RESUME``,``iot-dashboard``,``wechat-wordpress``,
+接著就是語言了，``Tex``,``Javascript``,``Ruby``,接著就是項目的url了。
 
 值得注意的是。
 
@@ -307,9 +307,9 @@ def get_count(username):
 -rw-r--r--   1 fdhuang staff 905M Apr 12 14:59 userdata.db
 ```
 
-这个数据库文件有**905M**，不过查询结果相当让人满意，至少相对于原来的结果来说。
+這個資料庫檔案有**905M**，不過查詢結果相當讓人滿意，至少相對於原來的結果來說。
 
-Python自带了对SQLite3的支持，然而我们还需要安装SQLite3
+Python自帶了對SQLite3的支援，然而我們還需要安裝SQLite3
 
 ```bash
 brew install sqlite3
@@ -317,7 +317,7 @@ brew install sqlite3
 
 或者是
 
-```bash   
+```bash
 sudo port install sqlite3
 ```
 
@@ -333,11 +333,11 @@ openSUSE自然就是
 sudo zypper install sqlite3
 ```
 
-不过，用yast2也很不错，不是么。。
+不過，用yast2也很不錯，不是麼。。
 
-###数据导入
+###資料匯入
 
-需要注意的是这里是需要python2.7，起源于对gzip的上下文管理器的支持问题
+需要注意的是這裡是需要python2.7，起源於對gzip的上下文管理器的支援問題
 
 ```python
 def handle_gzip_file(filename):
@@ -389,25 +389,25 @@ def build_db_with_gzip():
     c.close()
 ```
 
-``executemany``可以插入多条数据，对于我们的数据来说，一小时的文件大概有五六千个会符合我们上面的安装，也就是有``actor``又有``type``才是我们需要记录的数据，我们只需要统计用户的那些事件，而非全部的事件。
+``executemany``可以插入多條資料，對於我們的資料來說，一小時的檔案大概有五六千個會符合我們上面的安裝，也就是有``actor``又有``type``才是我們需要記錄的資料，我們只需要統計使用者的那些事件，而非全部的事件。
 
-我们需要去遍历文件，然后找到合适的部分，这里只是要找``2014-03-01``到``2014-03-31``的全部事件，而光这些数据的gz文件就有1.26G，同上面那些解压为json文件显得不合适，只能用遍历来处理。
+我們需要去遍歷檔案，然後找到合適的部分，這裡只是要找``2014-03-01``到``2014-03-31``的全部事件，而光這些資料的gz檔案就有1.26G，同上面那些解壓為json檔案顯得不合適，只能用遍歷來處理。
 
-这里参考了osrc项目中的写法，或者说直接复制过来。
+這裡參考了osrc項目中的寫法，或者說直接複製過來。
 
-首先是正规匹配
+首先是正規匹配
 
 ```python
 date_re = re.compile(r"([0-9]{4})-([0-9]{2})-([0-9]{2})-([0-9]+)\.json.gz")
 ```
 
-不过主要的还是在于``glob.glob``
+不過主要的還是在於``glob.glob``
 
-> glob是python自己带的一个文件操作相关模块，用它可以查找符合自己目的的文件，就类似于Windows下的文件搜索，支持通配符操作。
+> glob是python自己帶的一個檔案操作相關模組，用它可以查詢符合自己目的的檔案，就類似於Windows下的檔案搜尋，支援通配符操作。
 
-这里也就用上了``gzip.GzipFile``又一个不错的东西。
+這裡也就用上了``gzip.GzipFile``又一個不錯的東西。
 
-最后代码可以见
+最後程式碼可以見
 
 [github.com/gmszone/ml](http://github.com/gmszone/ml)
 
@@ -415,7 +415,7 @@ date_re = re.compile(r"([0-9]{4})-([0-9]{2})-([0-9]{2})-([0-9]+)\.json.gz")
 
 ###Redis
 
-查询用户事件总数
+查詢使用者事件總數
 
 ```python
 import redis
@@ -425,7 +425,7 @@ pipe.zscore('osrc:user',"gmszone")
 pipe.execute()
 ```
 
-系统返回了``227.0``,试试别人。
+系統返回了``227.0``,試試別人。
 
 ```bash
 >>> pipe.zscore('osrc:user',"dfm")
@@ -444,7 +444,7 @@ pipe.execute()
 [{'1': '51', '0': '41', '3': '17', '2': '34', '5': '28', '4': '22', '6': '34'}]
 ```
 
-结果大致如下图所示:
+結果大致如下圖所示:
 
 ![SMTWTFS](./img/smtwtfs.png)
 
@@ -458,13 +458,13 @@ pipe.execute()
 
 ![Main Event](./img/main-events.png)
 
-蓝色的就是push事件，黄色的是create等等。
+藍色的就是push事件，黃色的是create等等。
 
-到这里我们算是知道了OSRC的数据库部分是如何工作的。
+到這裡我們算是知道了OSRC的資料庫部分是如何工作的。
 
-####Redis 查询
+####Redis 查詢
 
-主要代码如下所示
+主要程式碼如下所示
 
 ```python
 def get_vector(user, pipe=None):
@@ -491,33 +491,33 @@ def get_vector(user, pipe=None):
         return pipe.execute()
 ```
 
-结果在上一篇中显示出来了，也就是
+結果在上一篇中顯示出來了，也就是
 
 ```
 [227.0, {'1': '51', '0': '41', '3': '17', '2': '34', '5': '28', '4': '22', '6': '34'}, [('PushEvent', 154.0), ('CreateEvent', 41.0), ('WatchEvent', 18.0), ('GollumEvent', 8.0), ('MemberEvent', 3.0), ('ForkEvent', 2.0), ('ReleaseEvent', 1.0)], 0, 0, 0, 11, [('CSS', 74.0), ('JavaScript', 60.0), ('Ruby', 12.0), ('TeX', 6.0), ('Python', 6.0), ('Java', 5.0), ('C++', 5.0), ('Assembly', 5.0), ('C', 3.0), ('Emacs Lisp', 2.0), ('Arduino', 2.0)]]
 ```
 
-有意思的是在这里生成了和自己相近的人
+有意思的是在這裡生成了和自己相近的人
 
 ```
 ['alesdokshanin', 'hjiawei', 'andrewreedy', 'christj6', '1995eaton']
 ```
 
-osrc最有意思的一部分莫过于flann，当然说的也是系统后台的设计的一个很关键及有意思的部分。
+osrc最有意思的一部分莫過於flann，當然說的也是系統後臺的設計的一個很關鍵及有意思的部分。
 
-##邻近算法与相似用户
+##鄰近演算法與相似使用者
 
-邻近算法是在这个分析过程中一个很有意思的东西。
+鄰近演算法是在這個分析過程中一個很有意思的東西。
 
->邻近算法，或者说K最近邻(kNN，k-NearestNeighbor)分类算法可以说是整个数据挖掘分类技术中最简单的方法了。所谓K最近邻，就是k个最近的邻居的意思，说的是每个样本都可以用她最接近的k个邻居来代表。
+>鄰近演算法，或者說K最近鄰(kNN，k-NearestNeighbor)分類演算法可以說是整個資料探勘分類技術中最簡單的方法了。所謂K最近鄰，就是k個最近的鄰居的意思，說的是每個樣本都可以用她最接近的k個鄰居來代表。
 
-换句话说，我们需要一些样本来当作我们的分析资料，这里东西用到的就是我们之前的。
+換句話說，我們需要一些樣本來當作我們的分析資料，這裡東西用到的就是我們之前的。
 
 ```
 [227.0, {'1': '51', '0': '41', '3': '17', '2': '34', '5': '28', '4': '22', '6': '34'}, [('PushEvent', 154.0), ('CreateEvent', 41.0), ('WatchEvent', 18.0), ('GollumEvent', 8.0), ('MemberEvent', 3.0), ('ForkEvent', 2.0), ('ReleaseEvent', 1.0)], 0, 0, 0, 11, [('CSS', 74.0), ('JavaScript', 60.0), ('Ruby', 12.0), ('TeX', 6.0), ('Python', 6.0), ('Java', 5.0), ('C++', 5.0), ('Assembly', 5.0), ('C', 3.0), ('Emacs Lisp', 2.0), ('Arduino', 2.0)]]
 ```
 
-在代码中是构建了一个points.h5的文件来分析每个用户的points，之后再记录到hdf5文件中。
+在程式碼中是構建了一個points.h5的檔案來分析每個使用者的points，之後再記錄到hdf5檔案中。
 
 ```
 [ 0.00438596  0.18061674  0.2246696   0.14977974  0.07488987  0.0969163
@@ -532,14 +532,14 @@ osrc最有意思的一部分莫过于flann，当然说的也是系统后台的�
     0.          0.          0.          0.          0.00881057]
 ```
 
-这里分析到用户的大部分行为，再找到与其行为相近的用户，主要的行为有下面这些:
+這裡分析到使用者的大部分行為，再找到與其行為相近的使用者，主要的行為有下面這些:
 
- - 每星期的情况
- - 事件的类型
- - 贡献的数量，连接以及语言
- - 最多的语言
+ - 每星期的情況
+ - 事件的類型
+ - 貢獻的數量，連線以及語言
+ - 最多的語言
 
-osrc中用于解析的代码
+osrc中用於解析的程式碼
 
 ```python
 def parse_vector(results):
@@ -576,7 +576,7 @@ def parse_vector(results):
     return points
 ```
 
-这样也就返回我们需要的点数，然后我们可以用``get_points``来获取这些
+這樣也就返回我們需要的點數，然後我們可以用``get_points``來獲取這些
 
 ```python
 def get_points(usernames):
@@ -589,7 +589,7 @@ def get_points(usernames):
     return points
 ```
 
-就会得到我们的相应的数据，接着找找和自己邻近的，看看结果。
+就會得到我們的相應的資料，接著找找和自己鄰近的，看看結果。
 
 ```
 [ 0.01298701  0.19736842  0.          0.30263158  0.21052632  0.19736842
@@ -604,4 +604,4 @@ def get_points(usernames):
     0.          0.          0.          0.        ]
 ```
 
-真看不出来两者有什么相似的地方 。。。。  
+真看不出來兩者有什麼相似的地方 。。。。
